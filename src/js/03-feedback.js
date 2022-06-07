@@ -5,11 +5,12 @@ const inputEl = document.querySelector('.feedback-form input');
 const textareaEl = document.querySelector('.feedback-form textarea');
 const localKeyToSave = 'feedback-form-state';
 
-let formContentToSave = { email: '', message: '' };
+let formContentToSave = { email:"" , message:"" };
 
+addEventListener("DOMContentLoaded", checkLocalStorage);
 formEl.addEventListener('input', throttle(onInputSavedToLocalStorage, 500));
 formEl.addEventListener('submit', onFormSubmit);
-addEventListener("DOMContentLoaded", checkLocalStorage);
+
 
 
 function onInputSavedToLocalStorage(e) {
@@ -19,17 +20,20 @@ function onInputSavedToLocalStorage(e) {
 
 
 function checkLocalStorage() {
-    if (localStorage.getItem(localKeyToSave)) {
+        if (localStorage.getItem(localKeyToSave)) {
         try {
             const parsedLocalData = JSON.parse(localStorage.getItem(localKeyToSave))
             inputEl.value = parsedLocalData.email;
             textareaEl.value = parsedLocalData.message;
-            return parsedLocalData;
+            formContentToSave.email = inputEl.value;
+            formContentToSave.message = textareaEl.value;
+            const savedLocalData = localStorage.setItem(localKeyToSave, JSON.stringify(formContentToSave))
            
        } catch (error) {
            console.log("Error with parsing")
        } 
-    }
+    } 
+
 }
 
 function onFormSubmit(e) {
